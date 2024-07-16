@@ -1,13 +1,18 @@
 "use client";
 
 import { ChangeEvent, FormEvent, useState } from "react";
-import "./index.css";
 import { AuthProxyService } from "@/proxy/auth";
-import { Space, Typography } from "antd";
+import { message, Space, Typography } from "antd";
+import { AuthService } from "@/services/auth";
+import { useRouter } from "next/navigation";
+import { AppRouter } from "@/constants";
 
 const { Text, Link } = Typography;
 
 export default function Login() {
+  const router = useRouter();
+  const [messageApi, contextHolder] = message.useMessage();
+
   const [formData, setFormData] = useState({
     username: "",
     password: "",
@@ -27,23 +32,37 @@ export default function Login() {
   const onSubmit = (event: FormEvent) => {
     event?.preventDefault();
 
-    AuthProxyService.signIn(formData)
-      .then((data) => console.log(data))
-      .catch((err) => setIsErrorVisible(true));
+    AuthService.signIn(formData)
+      .then((data) => {
+        openNotificationSuccess();
+        router.push(AppRouter.Home);
+      })
+      .catch((err) => {
+        openNotificationError(err?.response?.data);
+        setIsErrorVisible(true);
+      });
+  };
+
+  const openNotificationSuccess = () => {
+    messageApi.success("Login successfully");
+  };
+
+  const openNotificationError = (err: any) => {
+    messageApi.error(err?.error);
   };
 
   return (
     <div className="log-form">
       <h2 style={{ marginBottom: "36px" }}>Login</h2>
       <form onSubmit={onSubmit}>
-        <div className="flex flex-col" style={{ gap: "20px" }}>
-          <div className="flex flex-col" style={{ gap: "36px" }}>
+        <div className="flex flex-col" style={{ gap: "18px" }}>
+          <div className="flex flex-col" style={{ gap: "14px" }}>
             <div className="flex items-start	gap-1 flex-col justify-center">
               <input
                 name="username"
                 type="text"
                 title="username"
-                placeholder="Username"
+                placeholder="Username or email"
                 value={formData.username}
                 onChange={handleChange}
               />
@@ -59,11 +78,11 @@ export default function Login() {
                 onChange={handleChange}
               />
             </div>
-          </div>
 
-          {isErrorVisible && (
-            <Text type="danger">Wrong user information and password</Text>
-          )}
+            {isErrorVisible && (
+              <Text type="danger">Wrong user information and password</Text>
+            )}
+          </div>
 
           <div className="flex justify-between text-sm">
             <div className="flex gap-2">
@@ -81,7 +100,13 @@ export default function Login() {
           </button>
 
           <span className="text-center">
-            Don't have an account? <a href="#">Register</a>
+            Don't have an account?{" "}
+            <a
+              className="cursor-pointer hover:underline"
+              href={AppRouter.Register}
+            >
+              Register
+            </a>
           </span>
         </div>
       </form>

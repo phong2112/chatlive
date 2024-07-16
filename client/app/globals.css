@@ -25,3 +25,21 @@ body {
     text-wrap: balance;
   }
 }
+
+/* ANT-DESIGN OVER-RIDE */
+.auth-layout-wrapper .ant-input-affix-wrapper {
+  background: transparent;
+  border: none;
+  padding: 0px;
+}
+
+.auth-layout-wrapper .ant-input-affix-wrapper .ant-input-suffix {
+  position: absolute;
+  right: 16px;
+  top: 14px;
+}
+
+.auth-layout-wrapper .ant-input-affix-wrapper svg {
+  color: white;
+}
+

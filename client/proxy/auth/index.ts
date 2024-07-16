@@ -1,14 +1,18 @@
 import { apiUrl } from "@/constants";
-import axios from "axios";
+import axiosBase from "../axios";
+
+const endPoint = "/auth/";
 
 export const AuthProxyService = {
   async signIn(data: any): Promise<any> {
-    return axios.post(`${apiUrl}/auth/login`, data);
+    return axiosBase.post(`${endPoint}login`, data);
   },
 
-  async find(data: any): Promise<any> {
-    return axios.get(`${apiUrl}/auth/find`, {
-      params: data,
-    });
+  async register(data: any): Promise<any> {
+    return axiosBase.post(`${endPoint}register`, data);
+  },
+
+  async profile(): Promise<any> {
+    return axiosBase.get(`${endPoint}profile`);
   },
 };
