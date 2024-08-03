@@ -3,7 +3,7 @@ import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 @Entity() // Declares the class as an entity
 export class User {
   @PrimaryGeneratedColumn() // Auto-incremented primary key
-  id: number;
+  id: string;
 
   @Column({
     unique: true,
@@ -32,4 +32,10 @@ export class User {
     unique: true,
   })
   email: string;
+
+  @Column({
+    unique: true,
+    nullable: true,
+  })
+  resetToken: string;
 }

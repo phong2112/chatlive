@@ -3,11 +3,14 @@ import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
-
+import { hash } from 'bcrypt';
+import { EmailService } from 'src/email/email.service';
+import { UpdateUserDto } from './dto/update-user.dto';
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User) private userRepository: Repository<User>,
+    private emailService: EmailService,
   ) {}
 
   async create(createUserDto: CreateUserDto): Promise<User> {
@@ -27,9 +30,14 @@ export class UsersService {
         };
       }) || [];
 
-    console.log([...listPayloadAttributes]);
     return await this.userRepository.findOne({
       where: [...listPayloadAttributes],
+    });
+  }
+
+  async update(id: string, payload: UpdateUserDto): Promise<any> {
+    return await this.userRepository.update(id, {
+      ...payload,
     });
   }
 
@@ -47,6 +55,9 @@ export class UsersService {
         HttpStatus.FORBIDDEN,
       );
     }
+
+    const hashedPassword = await hash(payload.password, 10);
+    payload.password = hashedPassword;
 
     return await this.userRepository.save(payload);
   }

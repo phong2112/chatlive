@@ -14,10 +14,10 @@ import { ApiBody, ApiParam, ApiTags } from '@nestjs/swagger';
 import { SignInDto } from 'models/request/auth';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Controller('user')
 @ApiTags('user')
-
 export class UsersController {
   constructor(private userService: UsersService) {}
 
@@ -37,6 +37,7 @@ export class UsersController {
     return this.userService.create(payload);
   }
 
+  // @HttpCode(HttpStatus.OK)
   // @UseGuards(AuthGuard)
   // @Get('profile')
   // getProfile(@Request() req) {
