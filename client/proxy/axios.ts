@@ -1,5 +1,7 @@
 import axios from "axios";
-import { apiUrl } from "@/constants";
+import { apiUrl, AppRouter } from "@/constants";
+import { getCookie } from "cookies-next";
+import { useRouter } from "next/router";
 
 const axiosBase = axios.create({
   baseURL: apiUrl, // Replace with your API base URL
@@ -9,7 +11,7 @@ const axiosBase = axios.create({
 axiosBase.interceptors.request.use(
   (config) => {
     // Modify the request config here (add headers, authentication tokens)
-    const accessToken = localStorage.getItem("token") as string;
+    const accessToken = getCookie("token") as string;
 
     // If token is present, add it to request's Authorization Header
     if (accessToken) {
@@ -31,6 +33,9 @@ axiosBase.interceptors.response.use(
   },
   (error) => {
     // Handle response errors here
+    if (error.response.status === 401) {
+      window.location = AppRouter.Login as any;
+    }
     return Promise.reject(error);
   }
 );

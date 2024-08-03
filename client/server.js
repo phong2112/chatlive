@@ -19,7 +19,6 @@ app.prepare().then(() => {
 
     socket.on("sendMessage", (value) => {
       socket.emit("sendBack", `Edited: ${value}`);
-      console.log('check')
     });
   });
 

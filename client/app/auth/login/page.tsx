@@ -90,7 +90,7 @@ export default function Login() {
               <label>Remember me</label>
             </div>
 
-            <a className="forgot" href="#">
+            <a className="forgot" href={AppRouter.ForgotPassword}>
               Forgot password?
             </a>
           </div>

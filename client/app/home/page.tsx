@@ -7,7 +7,7 @@ import { Button, message } from "antd";
 export default function Home() {
   const [messageApi, contextHolder] = message.useMessage();
 
-  const getUser = () => {
+  const getProfile = () => {
     AuthService.getProfile().then(console.log);
   };
 
@@ -18,6 +18,12 @@ export default function Home() {
     });
   };
 
+  const logout = () => {
+    AuthService.logout();
+  };
+
+  const sendEmail = () => {};
+
   return (
     <>
       <p>Home page works</p>
@@ -25,6 +31,18 @@ export default function Home() {
 
       <Button type="primary" onClick={() => show()}>
         Test
+      </Button>
+
+      <Button type="primary" onClick={() => getProfile()}>
+        Get profile
+      </Button>
+
+      <Button type="primary" onClick={() => sendEmail()}>
+        Get profile
+      </Button>
+
+      <Button type="primary" onClick={() => logout()}>
+        Log out
       </Button>
     </>
   );
